@@ -1,0 +1,41 @@
+---
+version: "3.7"
+networks:
+  demyx:
+    name: demyx  
+
+services:
+  db:
+    container_name: demyx_db
+    image: demyx/mariadb
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    networks:
+      - demyx
+    volumes:
+      - demyx_db:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USERNAME=ubuntu
+      - MARIADB_PASSWORD=redhat
+      - MARIADB_ROOT_PASSWORD=redhat # mandatory
+  wp:
+    container_name: demyx_wp
+    image: demyx/nginx-php-wordpress
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - demyx
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_USER=ubuntu
+      - WORDPRESS_DB_PASSWORD=redhat
+
+volumes:
+  demyx_db:
+    name: demyx_db
