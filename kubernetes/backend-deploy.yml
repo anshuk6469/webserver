@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: hello
+      tier: backend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: hello
+          image: "demyx/mariadb"
+          ports:
+            - name: mariadb
+              containerPort: 3306
+          env:
+           - name: MARIADB_DATABASE
+             value: wordpress
+           - name: MARIADB_USERNAME
+             value: ubuntu
+           - name: MARIADB_PASSWORD
+             value: redhat
+           - name: MARIADB_ROOT_PASSWORD
+             value: redhat
+...
+
